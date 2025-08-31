@@ -25,7 +25,7 @@ if _version_not_supported:
     )
 
 
-class GreeterStub(object):
+class cliente_nameStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -34,43 +34,43 @@ class GreeterStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.SayHello = channel.unary_unary(
-                '/Greeter/SayHello',
-                request_serializer=servicios__pb2.HelloRequest.SerializeToString,
-                response_deserializer=servicios__pb2.HelloReply.FromString,
+        self.guardar_bloques = channel.unary_unary(
+                '/cliente_name/guardar_bloques',
+                request_serializer=servicios__pb2.informacion_archivo.SerializeToString,
+                response_deserializer=servicios__pb2.asignacion.FromString,
                 _registered_method=True)
 
 
-class GreeterServicer(object):
+class cliente_nameServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def SayHello(self, request, context):
+    def guardar_bloques(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_GreeterServicer_to_server(servicer, server):
+def add_cliente_nameServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'SayHello': grpc.unary_unary_rpc_method_handler(
-                    servicer.SayHello,
-                    request_deserializer=servicios__pb2.HelloRequest.FromString,
-                    response_serializer=servicios__pb2.HelloReply.SerializeToString,
+            'guardar_bloques': grpc.unary_unary_rpc_method_handler(
+                    servicer.guardar_bloques,
+                    request_deserializer=servicios__pb2.informacion_archivo.FromString,
+                    response_serializer=servicios__pb2.asignacion.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'Greeter', rpc_method_handlers)
+            'cliente_name', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('Greeter', rpc_method_handlers)
+    server.add_registered_method_handlers('cliente_name', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
-class Greeter(object):
+class cliente_name(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def SayHello(request,
+    def guardar_bloques(request,
             target,
             options=(),
             channel_credentials=None,
@@ -83,9 +83,9 @@ class Greeter(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/Greeter/SayHello',
-            servicios__pb2.HelloRequest.SerializeToString,
-            servicios__pb2.HelloReply.FromString,
+            '/cliente_name/guardar_bloques',
+            servicios__pb2.informacion_archivo.SerializeToString,
+            servicios__pb2.asignacion.FromString,
             options,
             channel_credentials,
             insecure,

@@ -24,17 +24,17 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0fservicios.proto\x12\rCliente.stubs\"-\n\x0cHelloRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07surname\x18\x02 \x01(\t\"\x1d\n\nHelloReply\x12\x0f\n\x07message\x18\x01 \x01(\t2M\n\x07Greeter\x12\x42\n\x08SayHello\x12\x1b.Cliente.stubs.HelloRequest\x1a\x19.Cliente.stubs.HelloReplyb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0fservicios.proto\"E\n\x13informacion_archivo\x12\x16\n\x0enombre_archivo\x18\x01 \x01(\t\x12\x16\n\x0enumero_bloques\x18\x02 \x01(\x05\"\x1d\n\nasignacion\x12\x0f\n\x07message\x18\x01 \x01(\t2D\n\x0c\x63liente_name\x12\x34\n\x0fguardar_bloques\x12\x14.informacion_archivo\x1a\x0b.asignacionb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'servicios_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_HELLOREQUEST']._serialized_start=34
-  _globals['_HELLOREQUEST']._serialized_end=79
-  _globals['_HELLOREPLY']._serialized_start=81
-  _globals['_HELLOREPLY']._serialized_end=110
-  _globals['_GREETER']._serialized_start=112
-  _globals['_GREETER']._serialized_end=189
+  _globals['_INFORMACION_ARCHIVO']._serialized_start=19
+  _globals['_INFORMACION_ARCHIVO']._serialized_end=88
+  _globals['_ASIGNACION']._serialized_start=90
+  _globals['_ASIGNACION']._serialized_end=119
+  _globals['_CLIENTE_NAME']._serialized_start=121
+  _globals['_CLIENTE_NAME']._serialized_end=189
 # @@protoc_insertion_point(module_scope)

@@ -27,16 +27,12 @@ def rearmar_archivo(ruta_archivo, bloques):
             img.write(f[1])
 
 
-
-
-
-
-def grpc():
+def envio(nombre, bloques):
     channel = grpc.insecure_channel("localhost:8080")
 
-    stub = servicios_pb2_grpc.GreeterStub(channel)
+    stub = servicios_pb2_grpc.cliente_nameStub(channel)
 
-    response = stub.guardar_bloques(servicios_pb2.informacion_archivo(name="Santiago", surname="Sanchez"))
+    response = stub.guardar_bloques(servicios_pb2.informacion_archivo(nombre_archivo=nombre, numero_bloques=bloques))
 
     print(response.message)
 
@@ -45,3 +41,5 @@ if __name__ == "__main__":
     bloques = dividir_archivo("Cliente/src/imagen.jpg")
 
     rearmar_archivo("Cliente/src/resultado.jpg", bloques)
+
+    envio("imagen.png", len(bloques))
