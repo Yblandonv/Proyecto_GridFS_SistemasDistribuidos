@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0fservicios.proto\"E\n\x13informacion_archivo\x12\x16\n\x0enombre_archivo\x18\x01 \x01(\t\x12\x16\n\x0enumero_bloques\x18\x02 \x01(\x05\"\x1d\n\nasignacion\x12\x0f\n\x07message\x18\x01 \x01(\t2D\n\x0c\x63liente_name\x12\x34\n\x0fguardar_bloques\x12\x14.informacion_archivo\x1a\x0b.asignacionb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0fservicios.proto\"E\n\x13informacion_archivo\x12\x16\n\x0enombre_archivo\x18\x01 \x01(\t\x12\x16\n\x0enumero_bloques\x18\x02 \x01(\x05\"\x1b\n\x08metadata\x12\x0f\n\x07message\x18\x01 \x01(\t\"0\n\x12informacion_bloque\x12\x0e\n\x06\x62loque\x18\x01 \x01(\x0c\x12\n\n\x02id\x18\x02 \x01(\x05\"\x1f\n\x0c\x63onfirmacion\x12\x0f\n\x07message\x18\x01 \x01(\t2B\n\x0c\x63liente_name\x12\x32\n\x0f\x65nviar_metadata\x12\x14.informacion_archivo\x1a\t.metadata2D\n\x0c\x63liente_data\x12\x34\n\x0e\x65nviar_bloques\x12\x13.informacion_bloque\x1a\r.confirmacionb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -33,8 +33,14 @@ if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
   _globals['_INFORMACION_ARCHIVO']._serialized_start=19
   _globals['_INFORMACION_ARCHIVO']._serialized_end=88
-  _globals['_ASIGNACION']._serialized_start=90
-  _globals['_ASIGNACION']._serialized_end=119
-  _globals['_CLIENTE_NAME']._serialized_start=121
-  _globals['_CLIENTE_NAME']._serialized_end=189
+  _globals['_METADATA']._serialized_start=90
+  _globals['_METADATA']._serialized_end=117
+  _globals['_INFORMACION_BLOQUE']._serialized_start=119
+  _globals['_INFORMACION_BLOQUE']._serialized_end=167
+  _globals['_CONFIRMACION']._serialized_start=169
+  _globals['_CONFIRMACION']._serialized_end=200
+  _globals['_CLIENTE_NAME']._serialized_start=202
+  _globals['_CLIENTE_NAME']._serialized_end=268
+  _globals['_CLIENTE_DATA']._serialized_start=270
+  _globals['_CLIENTE_DATA']._serialized_end=338
 # @@protoc_insertion_point(module_scope)

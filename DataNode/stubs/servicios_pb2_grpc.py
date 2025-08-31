@@ -34,17 +34,17 @@ class cliente_nameStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.guardar_bloques = channel.unary_unary(
-                '/cliente_name/guardar_bloques',
+        self.enviar_metadata = channel.unary_unary(
+                '/cliente_name/enviar_metadata',
                 request_serializer=servicios__pb2.informacion_archivo.SerializeToString,
-                response_deserializer=servicios__pb2.asignacion.FromString,
+                response_deserializer=servicios__pb2.metadata.FromString,
                 _registered_method=True)
 
 
 class cliente_nameServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def guardar_bloques(self, request, context):
+    def enviar_metadata(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -53,10 +53,10 @@ class cliente_nameServicer(object):
 
 def add_cliente_nameServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'guardar_bloques': grpc.unary_unary_rpc_method_handler(
-                    servicer.guardar_bloques,
+            'enviar_metadata': grpc.unary_unary_rpc_method_handler(
+                    servicer.enviar_metadata,
                     request_deserializer=servicios__pb2.informacion_archivo.FromString,
-                    response_serializer=servicios__pb2.asignacion.SerializeToString,
+                    response_serializer=servicios__pb2.metadata.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -70,7 +70,7 @@ class cliente_name(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def guardar_bloques(request,
+    def enviar_metadata(request,
             target,
             options=(),
             channel_credentials=None,
@@ -83,9 +83,81 @@ class cliente_name(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/cliente_name/guardar_bloques',
+            '/cliente_name/enviar_metadata',
             servicios__pb2.informacion_archivo.SerializeToString,
-            servicios__pb2.asignacion.FromString,
+            servicios__pb2.metadata.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+
+class cliente_dataStub(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.enviar_bloques = channel.unary_unary(
+                '/cliente_data/enviar_bloques',
+                request_serializer=servicios__pb2.informacion_bloque.SerializeToString,
+                response_deserializer=servicios__pb2.confirmacion.FromString,
+                _registered_method=True)
+
+
+class cliente_dataServicer(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def enviar_bloques(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_cliente_dataServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'enviar_bloques': grpc.unary_unary_rpc_method_handler(
+                    servicer.enviar_bloques,
+                    request_deserializer=servicios__pb2.informacion_bloque.FromString,
+                    response_serializer=servicios__pb2.confirmacion.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'cliente_data', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+    server.add_registered_method_handlers('cliente_data', rpc_method_handlers)
+
+
+ # This class is part of an EXPERIMENTAL API.
+class cliente_data(object):
+    """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def enviar_bloques(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/cliente_data/enviar_bloques',
+            servicios__pb2.informacion_bloque.SerializeToString,
+            servicios__pb2.confirmacion.FromString,
             options,
             channel_credentials,
             insecure,

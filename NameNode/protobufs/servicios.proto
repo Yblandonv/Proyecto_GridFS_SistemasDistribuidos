@@ -1,14 +1,27 @@
 syntax = "proto3";
 
 service cliente_name {
-rpc guardar_bloques (informacion_archivo ) returns (asignacion);
+    rpc enviar_metadata (informacion_archivo ) returns (metadata);
 }
 
 message informacion_archivo  {
-string nombre_archivo = 1;
-int32 numero_bloques = 2;
+    string nombre_archivo = 1;
+    int32 numero_bloques = 2;
 }
 
-message asignacion {
-string message = 1;
+message metadata {
+    string message = 1;
+}
+
+service cliente_data {
+    rpc enviar_bloques (informacion_bloque) returns (confirmacion);
+}
+
+message informacion_bloque {
+    bytes bloque = 1;
+    int32 id = 2;
+}
+
+message confirmacion {
+    string message = 1;
 }

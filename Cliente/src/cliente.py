@@ -5,6 +5,7 @@ from Cliente.stubs import servicios_pb2, servicios_pb2_grpc
 def dividir_archivo(ruta_archivo, tamaño_bloque=1024*1024): # Partimos los bloques en 1 MB cada uno
     bloques = []
     with open(ruta_archivo, "rb") as f:
+
         i = 1
         while True:
         
@@ -17,7 +18,7 @@ def dividir_archivo(ruta_archivo, tamaño_bloque=1024*1024): # Partimos los bloq
             i += 1
             
     
-    return bloques
+    return bloques # Se devuelve una lista de tuplas con [ID, Bytes]
 
 
 def rearmar_archivo(ruta_archivo, bloques):
@@ -27,19 +28,36 @@ def rearmar_archivo(ruta_archivo, bloques):
             img.write(f[1])
 
 
-def envio(nombre, bloques):
+def envio_archivo(nombre, num_bloques):
     channel = grpc.insecure_channel("localhost:8080")
 
     stub = servicios_pb2_grpc.cliente_nameStub(channel)
 
-    response = stub.guardar_bloques(servicios_pb2.informacion_archivo(nombre_archivo=nombre, numero_bloques=bloques))
+    response = stub.enviar_metadata(servicios_pb2.informacion_archivo(nombre_archivo=nombre, numero_bloques=num_bloques))
 
     print(response.message)
 
 
-if __name__ == "__main__":
+def envio_bloques(bloque):
+    channel = grpc.insecure_channel("localhost:8080")
+
+    stub = servicios_pb2_grpc.cliente_dataStub(channel)
+
+    response = stub.enviar_bloques(servicios_pb2.informacion_bloque(bloque=bloque[1], id=bloque[0]))
+
+    print(response.message)
+    
+
+def main():
     bloques = dividir_archivo("Cliente/src/imagen.jpg")
 
-    rearmar_archivo("Cliente/src/resultado.jpg", bloques)
+    for bloque in bloques:
+        envio_bloques(bloque)
 
-    envio("imagen.png", len(bloques))
+    #rearmar_archivo("Cliente/src/resultado.jpg", bloques)
+
+    #envio_archivo("imagen.png", len(bloques))
+
+
+if __name__ == "__main__":
+    main()

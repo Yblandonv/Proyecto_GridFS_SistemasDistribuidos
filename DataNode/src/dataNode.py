@@ -7,12 +7,22 @@ from concurrent import futures
 
 from DataNode.stubs import servicios_pb2, servicios_pb2_grpc
 
-class cliente_nameServicer(servicios_pb2_grpc.cliente_nameServicer):
-    def guardar_bloques(self, request, context):
-        return servicios_pb2.asignacion(message=f"Adios, {request.nombre_archivo} {request.numero_bloques}!")
+class cliente_dataServicer(servicios_pb2_grpc.cliente_dataServicer):
+
+    def enviar_bloques(self, request, context):
+        return servicios_pb2.confirmacion(message=f"Se recibio el bloque: {request.id}!")
     
-server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-servicios_pb2_grpc.add_cliente_nameServicer_to_server(cliente_nameServicer(), server)
-server.add_insecure_port("[::]:8080")
-server.start()
-server.wait_for_termination()
+
+def recibir_bloque():
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    servicios_pb2_grpc.add_cliente_dataServicer_to_server(cliente_dataServicer(), server)
+    server.add_insecure_port("[::]:8080")
+    server.start()
+    server.wait_for_termination()
+
+
+def main():
+    recibir_bloque()
+
+if __name__ == "__main__":
+    main()
