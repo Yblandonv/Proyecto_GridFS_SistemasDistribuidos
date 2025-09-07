@@ -1,4 +1,6 @@
 import grpc
+import sys, os
+import configparser
 
 from Cliente.stubs import servicios_pb2, servicios_pb2_grpc
 
@@ -28,8 +30,9 @@ def rearmar_archivo(ruta_archivo, bloques):
             img.write(f[1])
 
 
-def envio_archivo(nombre, num_bloques):
-    channel = grpc.insecure_channel("localhost:8080")
+def envio_archivo(nombre, num_bloques, ip, port): # Cliente -- NameNode
+
+    channel = grpc.insecure_channel(f"{ip}:{port}")
 
     stub = servicios_pb2_grpc.cliente_nameStub(channel)
 
@@ -38,7 +41,7 @@ def envio_archivo(nombre, num_bloques):
     print(response.message)
 
 
-def envio_bloques(bloque):
+def envio_bloques(bloque): # Cliente -- DataNode
     channel = grpc.insecure_channel("localhost:8080")
 
     stub = servicios_pb2_grpc.cliente_dataStub(channel)
@@ -48,15 +51,36 @@ def envio_bloques(bloque):
     print(response.message)
     
 
+def get_ip():
+    config = configparser.ConfigParser()
+    config.read('address.config')
+    ip = config['nameNode']['ip']
+
+    return ip
+
+def get_port():
+    config = configparser.ConfigParser()
+    config.read('address.config')
+    port = config['nameNode']['port']
+
+    return port
+
 def main():
-    bloques = dividir_archivo("Cliente/src/imagen.jpg")
+    if len(sys.argv) > 1:
+        
+        ruta_image = sys.argv[1]
 
-    for bloque in bloques:
-        envio_bloques(bloque)
+        bloques = dividir_archivo(ruta_image)
 
-    #rearmar_archivo("Cliente/src/resultado.jpg", bloques)
+        envio_archivo(ruta_image, len(bloques), get_ip(), get_port())
 
-    #envio_archivo("imagen.png", len(bloques))
+        #for bloque in bloques:
+        #    envio_bloques(bloque)
+
+        #rearmar_archivo("resultado.jpg", bloques)
+    else:
+        print("Por favor, proporciona la ruta valida de la imagen.")
+        
 
 
 if __name__ == "__main__":
