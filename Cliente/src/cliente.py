@@ -72,10 +72,10 @@ def main():
 
         bloques = dividir_archivo(ruta_image)
 
-        envio_archivo(ruta_image, len(bloques), get_ip(), get_port())
+        #envio_archivo(ruta_image, len(bloques), get_ip(), get_port())
 
-        #for bloque in bloques:
-        #    envio_bloques(bloque)
+        for bloque in bloques:
+            envio_bloques(bloque)
 
         #rearmar_archivo("resultado.jpg", bloques)
     else:
