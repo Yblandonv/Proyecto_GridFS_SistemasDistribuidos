@@ -51,12 +51,12 @@ def envio_bloques(bloque):
 def main():
     bloques = dividir_archivo("Cliente/src/imagen.jpg")
 
-    for bloque in bloques:
-        envio_bloques(bloque)
+    #for bloque in bloques:
+        #envio_bloques(bloque)
 
     #rearmar_archivo("Cliente/src/resultado.jpg", bloques)
 
-    #envio_archivo("imagen.png", len(bloques))
+    envio_archivo("imagen.png", len(bloques))
 
 
 if __name__ == "__main__":
