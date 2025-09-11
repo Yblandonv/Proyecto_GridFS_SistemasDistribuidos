@@ -1,4 +1,5 @@
 import grpc
+import sqlite3
 
 from concurrent import futures
 from NameNode.stubs import servicios_pb2, servicios_pb2_grpc
@@ -17,8 +18,27 @@ def recibir_peticiones():
     server.start()
     server.wait_for_termination()
 
+def connect_database():
+    try:
+        sqlite_connection = sqlite3.connect('bloques.db')
+        cursor = sqlite_connection.cursor()
+        print("DB connected")
+
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print('Error occurred -', error)
+
+    finally:
+        if sqlite_connection:
+            sqlite_connection.close()
+            print('SQLite Connection closed')
+    
+
+
 
 
 
 if __name__ == "__main__":
+    connect_database()
     recibir_peticiones()
