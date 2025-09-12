@@ -4,12 +4,12 @@ import sqlite3
 from concurrent import futures
 from NameNode.stubs import servicios_pb2, servicios_pb2_grpc
 
-
+import configparser
 
 class cliente_nameServicer(servicios_pb2_grpc.cliente_nameServicer):
     def enviar_metadata(self, request, context):
         guardar_bloques(request.nombre_archivo, request.numero_bloques)
-        return servicios_pb2.metadata(message=f"Hola, {request.nombre_archivo} {request.numero_bloques}!")
+        return servicios_pb2.metadata(message=f"Tu imagen fue guardada con exito!!")
 
 
 def recibir_peticiones():
@@ -19,47 +19,63 @@ def recibir_peticiones():
     server.start()
     server.wait_for_termination()
 
-def connect_database():
-    try:
-        sqlite_connection = sqlite3.connect('bloques.db')
-        cursor = sqlite_connection.cursor()
-        print("DB connected")
-
-        cursor.close()
-
-    except sqlite3.Error as error:
-        print('Error occurred -', error)
-
-    finally:
-        if sqlite_connection:
-            sqlite_connection.close()
-            print('SQLite Connection closed')
     
 def guardar_bloques(nombre_archivo, numero_bloques):
     conn = sqlite3.connect('bloques.db')
     cursor = conn.cursor()
+
     for i in range(numero_bloques):
-        cursor.execute("INSERT INTO bloques (name_block, id_block) VALUES (?, ?)", (nombre_archivo, i))
+        cursor.execute("INSERT INTO bloques (name_bloque, id_bloque) VALUES (?, ?)", (f'{nombre_archivo}{i+1}', i+1))
+
     conn.commit()
     cursor.close()
 
 def agregar_datanode(ip):
     conn = sqlite3.connect('bloques.db')
     cursor = conn.cursor()
+
     cursor.execute("INSERT INTO datanodes (ip) VALUES (?)", (ip,))
     conn.commit()
+
     cursor.close()
     conn.close()
 
 def obtener_datanodes():
     conn = sqlite3.connect('bloques.db')
     cursor = conn.cursor()
+
     cursor.execute("SELECT id, ip FROM datanodes")
     datanodes = cursor.fetchall()
+
     cursor.close()
     conn.close()
+
     return datanodes
 
+def borrar_datanode():
+    conn = sqlite3.connect('bloques.db')
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM datanodes")
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+def get_ip(i):
+    config = configparser.ConfigParser()
+    config.read('address.config')
+    ip = config[f'dataNode{i+1}']['ip']
+
+    return ip
+
+
 if __name__ == "__main__":
-    connect_database()
+    print("Servidor encendido..\n")
+    borrar_datanode() #Borrar las ip de los dataNodes por si cambian con el tiempo
+    for i in range(2):
+        ip = get_ip(i)
+        agregar_datanode(ip)
+
     recibir_peticiones()
+    
