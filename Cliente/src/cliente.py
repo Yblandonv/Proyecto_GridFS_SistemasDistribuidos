@@ -16,7 +16,7 @@ def dividir_archivo(ruta_archivo, tamaño_bloque=1024*1024): # Partimos los bloq
             if not datos:
                 break
             
-            bloques.append((i, datos))
+            bloques.append((ruta_archivo, f'{ruta_archivo}{i}', datos))
             i += 1
             
     
@@ -38,15 +38,15 @@ def envio_archivo(nombre, num_bloques, ip, port): # Cliente -- NameNode
 
     response = stub.enviar_metadata(servicios_pb2.informacion_archivo(nombre_archivo=nombre, numero_bloques=num_bloques))
 
-    print(response.message)
+    return response.message
 
 
-def envio_bloques(bloque): # Cliente -- DataNode
-    channel = grpc.insecure_channel("localhost:8080")
+def envio_bloques(bloque, ip): # Cliente -- DataNode
+    channel = grpc.insecure_channel(f"{ip}:8080")
 
     stub = servicios_pb2_grpc.cliente_dataStub(channel)
 
-    response = stub.enviar_bloques(servicios_pb2.informacion_bloque(bloque=bloque[1], id=bloque[0]))
+    response = stub.enviar_bloques(servicios_pb2.informacion_bloque(bloque=bloque[2], id=bloque[1], nombre=bloque[0]))
 
     print(response.message)
     
@@ -72,10 +72,14 @@ def main():
 
         bloques = dividir_archivo(ruta_image)
 
-        envio_archivo(ruta_image, len(bloques), get_ip(), get_port())
+        asinacion = envio_archivo(ruta_image, len(bloques), get_ip(), get_port())
 
-        #for bloque in bloques:
-        #    envio_bloques(bloque)
+        i = 0
+        for bloque in bloques:
+            print(f'ip: {asinacion[i]} --- {bloque[0]}')
+
+            i +=1
+            #envio_bloques(bloque)
 
         #rearmar_archivo("resultado.jpg", bloques)
     else:

@@ -16,7 +16,7 @@ def guardar_bloque(nombre_archivo, num_bloque, datos_bloque):
     if not os.path.exists(archivo_dir):
         os.makedirs(archivo_dir)
 
-    bloque_path = os.path.join(archivo_dir, f"block_{num_bloque}")
+    bloque_path = os.path.join(archivo_dir, f"{num_bloque}")
     with open(bloque_path, "wb") as f:
         f.write(datos_bloque)
 
@@ -25,7 +25,7 @@ def guardar_bloque(nombre_archivo, num_bloque, datos_bloque):
 class cliente_dataServicer(servicios_pb2_grpc.cliente_dataServicer):
     def enviar_bloques(self, request, context):
         # Aquí guardamos el bloque recibido
-        guardar_bloque("imagen.jpg", request.id, request.bloque)
+        guardar_bloque(request.nombre, request.id, request.bloque)
         return servicios_pb2.confirmacion(message=f"Se recibió y guardó el bloque: {request.id}!")
 
 def recibir_bloque():
@@ -39,4 +39,5 @@ def main():
     recibir_bloque()
 
 if __name__ == "__main__":
+    print("Servidor encendido..\n")
     main()

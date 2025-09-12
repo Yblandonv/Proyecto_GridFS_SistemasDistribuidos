@@ -10,7 +10,7 @@ message informacion_archivo  {
 }
 
 message metadata {
-    string message = 1;
+    repeated string message = 1;
 }
 
 service cliente_data {
@@ -19,7 +19,8 @@ service cliente_data {
 
 message informacion_bloque {
     bytes bloque = 1;
-    int32 id = 2;
+    string id = 2;
+    string nombre = 3;
 }
 
 message confirmacion {

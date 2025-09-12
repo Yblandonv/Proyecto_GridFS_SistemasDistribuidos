@@ -4,13 +4,15 @@ import sqlite3
 from concurrent import futures
 from NameNode.stubs import servicios_pb2, servicios_pb2_grpc
 
+from itertools import cycle
+
 import configparser
 
 class cliente_nameServicer(servicios_pb2_grpc.cliente_nameServicer):
     def enviar_metadata(self, request, context):
-        guardar_bloques(request.nombre_archivo, request.numero_bloques)
-        return servicios_pb2.metadata(message=f"Tu imagen fue guardada con exito!!")
-
+        asignaciones = asignar_datanodes(request.nombre_archivo, request.numero_bloques)
+        
+        return servicios_pb2.metadata(message=asignaciones)
 
 def recibir_peticiones():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
@@ -18,17 +20,32 @@ def recibir_peticiones():
     server.add_insecure_port("[::]:8080")
     server.start()
     server.wait_for_termination()
-
     
-def guardar_bloques(nombre_archivo, numero_bloques):
+def guardar_bloques(nombre_archivo, i, ip):
     conn = sqlite3.connect('bloques.db')
     cursor = conn.cursor()
 
-    for i in range(numero_bloques):
-        cursor.execute("INSERT INTO bloques (name_bloque, id_bloque) VALUES (?, ?)", (f'{nombre_archivo}{i+1}', i+1))
+    cursor.execute("INSERT INTO bloques (name_bloque, id_bloque, ip_asignada) VALUES (?, ?, ?)", (f'{nombre_archivo}{i+1}', i+1, ip))
 
     conn.commit()
     cursor.close()
+
+def asignar_datanodes(nombre_archivo, num_bloques):
+    #Metodo usado round robin
+    
+    data_nodes = obtener_datanodes()
+
+    asignaciones = []
+
+    aux = 0
+    for ip in cycle(data_nodes):
+        guardar_bloques(nombre_archivo, aux, ip[0])
+        asignaciones.append(ip[0])
+        aux += 1
+        if aux == num_bloques:
+            break
+
+    return asignaciones
 
 def agregar_datanode(ip):
     conn = sqlite3.connect('bloques.db')
@@ -44,7 +61,7 @@ def obtener_datanodes():
     conn = sqlite3.connect('bloques.db')
     cursor = conn.cursor()
 
-    cursor.execute("SELECT id, ip FROM datanodes")
+    cursor.execute("SELECT ip FROM datanodes")
     datanodes = cursor.fetchall()
 
     cursor.close()
@@ -72,8 +89,9 @@ def get_ip(i):
 
 if __name__ == "__main__":
     print("Servidor encendido..\n")
-    borrar_datanode() #Borrar las ip de los dataNodes por si cambian con el tiempo
-    for i in range(2):
+    borrar_datanode()
+    
+    for i in range(3):
         ip = get_ip(i)
         agregar_datanode(ip)
 
