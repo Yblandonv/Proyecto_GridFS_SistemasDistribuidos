@@ -50,7 +50,7 @@ def peticion_archivo(nombre, num_bloques, ip, metodo, password): # Cliente -- Na
 
 
 def peticion_bloques(bloque, ip, nombre_bloque, nombre_archivo, metodo): # Cliente -- DataNode
-    channel = grpc.insecure_channel(f"{ip}:5000")
+    channel = grpc.insecure_channel(f"{ip}:8080")
 
     stub = servicios_pb2_grpc.cliente_dataStub(channel)
 
@@ -99,6 +99,8 @@ def comunicacion():
             peticion_bloques(bloque, asignacion[i], None, None, True)
             i +=1
 
+        print("Imagen guardada \n")
+
     elif sys.argv[1] == "get":
         resultado = peticion_archivo(ruta_image, 0, get_ip(), False, password)
         if not resultado:
@@ -111,6 +113,8 @@ def comunicacion():
             file.append(peticion_bloques(None, bloque[0], bloque[1], ruta_image, False))
 
         rearmar_archivo(sys.argv[3], file)  if sys.argv[3] != None else rearmar_archivo("resultado.jpg", file)
+
+        print("Imagen Recuperada \n")
 
 
     else:
