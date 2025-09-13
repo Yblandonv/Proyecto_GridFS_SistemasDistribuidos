@@ -32,7 +32,7 @@ def rearmar_archivo(ruta_archivo, bloques):
 
 def envio_archivo(nombre, num_bloques, ip, port): # Cliente -- NameNode
 
-    channel = grpc.insecure_channel(f"{ip}:{port}")
+    channel = grpc.insecure_channel(f"{ip}:8080")
 
     stub = servicios_pb2_grpc.cliente_nameStub(channel)
 
@@ -70,16 +70,15 @@ def main():
         
         ruta_image = sys.argv[1]
 
+        
         bloques = dividir_archivo(ruta_image)
 
-        asinacion = envio_archivo(ruta_image, len(bloques), get_ip(), get_port())
+        asignacion = envio_archivo(ruta_image, len(bloques), get_ip(), get_port())
 
         i = 0
         for bloque in bloques:
-            print(f'ip: {asinacion[i]} --- {bloque[0]}')
-
+            envio_bloques(bloque, asignacion[i])
             i +=1
-            #envio_bloques(bloque)
 
         #rearmar_archivo("resultado.jpg", bloques)
     else:
