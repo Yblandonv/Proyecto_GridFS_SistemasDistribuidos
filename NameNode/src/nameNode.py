@@ -13,6 +13,11 @@ class cliente_nameServicer(servicios_pb2_grpc.cliente_nameServicer):
         asignaciones = asignar_datanodes(request.nombre_archivo, request.numero_bloques)
         
         return servicios_pb2.metadata(message=asignaciones)
+    
+    def pedir_metadata(self, request, context):
+        bloques = obtener_bloques(request.archivo)
+
+        return servicios_pb2.lista_bloques(dir_bloques=bloques)
 
 def recibir_peticiones():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
@@ -25,7 +30,7 @@ def guardar_bloques(nombre_archivo, i, ip):
     conn = sqlite3.connect('bloques.db')
     cursor = conn.cursor()
 
-    cursor.execute("INSERT INTO bloques (name_bloque, id_bloque, ip_asignada) VALUES (?, ?, ?)", (f'{nombre_archivo}{i+1}', i+1, ip))
+    cursor.execute("INSERT INTO bloques (name_bloque, name_archivo, ip_asignada) VALUES (?, ?, ?)", (f'{nombre_archivo}{i+1}', nombre_archivo, ip))
 
     conn.commit()
     cursor.close()
@@ -68,6 +73,27 @@ def obtener_datanodes():
     conn.close()
 
     return datanodes
+
+def obtener_bloques(nombre_archivo):
+    conn = sqlite3.connect('bloques.db')
+    cursor = conn.cursor()
+
+    cursor.execute(f"SELECT ip_asignada, name_bloque FROM bloques WHERE name_archivo = ?", (nombre_archivo,))
+    datanodes = cursor.fetchall()
+
+    bloques = []
+
+    for bloque in datanodes:
+        aux = servicios_pb2.lista()
+        aux.dir_bloques.extend(bloque)
+        bloques.append(aux)
+
+    print(bloques)
+
+    cursor.close()
+    conn.close()
+
+    return bloques
 
 def borrar_datanode():
     conn = sqlite3.connect('bloques.db')

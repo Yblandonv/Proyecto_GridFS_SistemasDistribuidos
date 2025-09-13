@@ -2,6 +2,19 @@ syntax = "proto3";
 
 service cliente_name {
     rpc enviar_metadata (informacion_archivo ) returns (metadata);
+    rpc pedir_metadata (peticion) returns (lista_bloques);
+}
+
+message peticion {
+    string archivo = 1;
+}
+
+message lista_bloques {
+    repeated lista dir_bloques = 1;
+}
+
+message lista {
+    repeated string dir_bloques = 1;
 }
 
 message informacion_archivo  {
@@ -15,6 +28,17 @@ message metadata {
 
 service cliente_data {
     rpc enviar_bloques (informacion_bloque) returns (confirmacion);
+    rpc recibir_bloques (peticion_bloque) returns (respuesta_bloque);
+}
+
+message peticion_bloque {
+    string nombre_archivo = 1;
+    string nombre_bloque = 2;
+}
+
+
+message respuesta_bloque {
+    bytes bloque = 1;
 }
 
 message informacion_bloque {

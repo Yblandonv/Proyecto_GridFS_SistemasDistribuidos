@@ -22,11 +22,25 @@ def guardar_bloque(nombre_archivo, num_bloque, datos_bloque):
 
     print(f"[DataNode] Guardado {bloque_path}")
 
+def acceder_bloque(nombre_bloque, nombre_archivo):
+
+    with open(f"./data_datanode/{nombre_archivo}/{nombre_bloque}", "rb") as f:
+
+        datos = f.read()
+
+        return datos
+
+
 class cliente_dataServicer(servicios_pb2_grpc.cliente_dataServicer):
     def enviar_bloques(self, request, context):
         # Aquí guardamos el bloque recibido
         guardar_bloque(request.nombre, request.id, request.bloque)
         return servicios_pb2.confirmacion(message=f"Se recibió y guardó el bloque: {request.id}!")
+    
+    def recibir_bloques(self, request, context):
+        # Aquí recibimos la petición de get
+        
+        return servicios_pb2.respuesta_bloque(bloque=acceder_bloque(request.nombre_bloque, request.nombre_archivo))
 
 def recibir_bloque():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
