@@ -13,10 +13,8 @@ Sistema de archivos distribuido minimalista inspirado en HDFS y GFS, implementad
 
 ##  Arquitectura
 
-```
 <img width="918" height="773" alt="image" src="https://github.com/user-attachments/assets/ccd83953-813b-468d-962c-a9e8dd2c8981" />
 
-```
 
 ## Inicio Rápido
 
