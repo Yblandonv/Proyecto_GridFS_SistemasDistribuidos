@@ -6,6 +6,7 @@ service cliente_name {
 }
 message peticion {
     string archivo = 1;
+    string password = 2;
 }
 
 message lista_bloques {
@@ -19,6 +20,7 @@ message lista {
 message informacion_archivo  {
     string nombre_archivo = 1;
     int32 numero_bloques = 2;
+    string password = 3;
 }
 
 message metadata {

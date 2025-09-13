@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0fservicios.proto\"\x1b\n\x08peticion\x12\x0f\n\x07\x61rchivo\x18\x01 \x01(\t\",\n\rlista_bloques\x12\x1b\n\x0b\x64ir_bloques\x18\x01 \x03(\x0b\x32\x06.lista\"\x1c\n\x05lista\x12\x13\n\x0b\x64ir_bloques\x18\x01 \x03(\t\"E\n\x13informacion_archivo\x12\x16\n\x0enombre_archivo\x18\x01 \x01(\t\x12\x16\n\x0enumero_bloques\x18\x02 \x01(\x05\"\x1b\n\x08metadata\x12\x0f\n\x07message\x18\x01 \x03(\t\"@\n\x0fpeticion_bloque\x12\x16\n\x0enombre_archivo\x18\x01 \x01(\t\x12\x15\n\rnombre_bloque\x18\x02 \x01(\t\"\"\n\x10respuesta_bloque\x12\x0e\n\x06\x62loque\x18\x01 \x01(\x0c\"@\n\x12informacion_bloque\x12\x0e\n\x06\x62loque\x18\x01 \x01(\x0c\x12\n\n\x02id\x18\x02 \x01(\t\x12\x0e\n\x06nombre\x18\x03 \x01(\t\"\x1f\n\x0c\x63onfirmacion\x12\x0f\n\x07message\x18\x01 \x01(\t2o\n\x0c\x63liente_name\x12\x32\n\x0f\x65nviar_metadata\x12\x14.informacion_archivo\x1a\t.metadata\x12+\n\x0epedir_metadata\x12\t.peticion\x1a\x0e.lista_bloques2|\n\x0c\x63liente_data\x12\x34\n\x0e\x65nviar_bloques\x12\x13.informacion_bloque\x1a\r.confirmacion\x12\x36\n\x0frecibir_bloques\x12\x10.peticion_bloque\x1a\x11.respuesta_bloqueb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0fservicios.proto\"-\n\x08peticion\x12\x0f\n\x07\x61rchivo\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\",\n\rlista_bloques\x12\x1b\n\x0b\x64ir_bloques\x18\x01 \x03(\x0b\x32\x06.lista\"\x1c\n\x05lista\x12\x13\n\x0b\x64ir_bloques\x18\x01 \x03(\t\"W\n\x13informacion_archivo\x12\x16\n\x0enombre_archivo\x18\x01 \x01(\t\x12\x16\n\x0enumero_bloques\x18\x02 \x01(\x05\x12\x10\n\x08password\x18\x03 \x01(\t\"\x1b\n\x08metadata\x12\x0f\n\x07message\x18\x01 \x03(\t\"@\n\x0fpeticion_bloque\x12\x16\n\x0enombre_archivo\x18\x01 \x01(\t\x12\x15\n\rnombre_bloque\x18\x02 \x01(\t\"\"\n\x10respuesta_bloque\x12\x0e\n\x06\x62loque\x18\x01 \x01(\x0c\"@\n\x12informacion_bloque\x12\x0e\n\x06\x62loque\x18\x01 \x01(\x0c\x12\n\n\x02id\x18\x02 \x01(\t\x12\x0e\n\x06nombre\x18\x03 \x01(\t\"\x1f\n\x0c\x63onfirmacion\x12\x0f\n\x07message\x18\x01 \x01(\t2o\n\x0c\x63liente_name\x12\x32\n\x0f\x65nviar_metadata\x12\x14.informacion_archivo\x1a\t.metadata\x12+\n\x0epedir_metadata\x12\t.peticion\x1a\x0e.lista_bloques2|\n\x0c\x63liente_data\x12\x34\n\x0e\x65nviar_bloques\x12\x13.informacion_bloque\x1a\r.confirmacion\x12\x36\n\x0frecibir_bloques\x12\x10.peticion_bloque\x1a\x11.respuesta_bloqueb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,25 +32,25 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'servicios_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
   _globals['_PETICION']._serialized_start=19
-  _globals['_PETICION']._serialized_end=46
-  _globals['_LISTA_BLOQUES']._serialized_start=48
-  _globals['_LISTA_BLOQUES']._serialized_end=92
-  _globals['_LISTA']._serialized_start=94
-  _globals['_LISTA']._serialized_end=122
-  _globals['_INFORMACION_ARCHIVO']._serialized_start=124
-  _globals['_INFORMACION_ARCHIVO']._serialized_end=193
-  _globals['_METADATA']._serialized_start=195
-  _globals['_METADATA']._serialized_end=222
-  _globals['_PETICION_BLOQUE']._serialized_start=224
-  _globals['_PETICION_BLOQUE']._serialized_end=288
-  _globals['_RESPUESTA_BLOQUE']._serialized_start=290
-  _globals['_RESPUESTA_BLOQUE']._serialized_end=324
-  _globals['_INFORMACION_BLOQUE']._serialized_start=326
-  _globals['_INFORMACION_BLOQUE']._serialized_end=390
-  _globals['_CONFIRMACION']._serialized_start=392
-  _globals['_CONFIRMACION']._serialized_end=423
-  _globals['_CLIENTE_NAME']._serialized_start=425
-  _globals['_CLIENTE_NAME']._serialized_end=536
-  _globals['_CLIENTE_DATA']._serialized_start=538
-  _globals['_CLIENTE_DATA']._serialized_end=662
+  _globals['_PETICION']._serialized_end=64
+  _globals['_LISTA_BLOQUES']._serialized_start=66
+  _globals['_LISTA_BLOQUES']._serialized_end=110
+  _globals['_LISTA']._serialized_start=112
+  _globals['_LISTA']._serialized_end=140
+  _globals['_INFORMACION_ARCHIVO']._serialized_start=142
+  _globals['_INFORMACION_ARCHIVO']._serialized_end=229
+  _globals['_METADATA']._serialized_start=231
+  _globals['_METADATA']._serialized_end=258
+  _globals['_PETICION_BLOQUE']._serialized_start=260
+  _globals['_PETICION_BLOQUE']._serialized_end=324
+  _globals['_RESPUESTA_BLOQUE']._serialized_start=326
+  _globals['_RESPUESTA_BLOQUE']._serialized_end=360
+  _globals['_INFORMACION_BLOQUE']._serialized_start=362
+  _globals['_INFORMACION_BLOQUE']._serialized_end=426
+  _globals['_CONFIRMACION']._serialized_start=428
+  _globals['_CONFIRMACION']._serialized_end=459
+  _globals['_CLIENTE_NAME']._serialized_start=461
+  _globals['_CLIENTE_NAME']._serialized_end=572
+  _globals['_CLIENTE_DATA']._serialized_start=574
+  _globals['_CLIENTE_DATA']._serialized_end=698
 # @@protoc_insertion_point(module_scope)

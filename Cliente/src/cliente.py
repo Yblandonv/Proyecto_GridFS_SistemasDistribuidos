@@ -30,19 +30,19 @@ def rearmar_archivo(ruta_archivo, bloques):
             img.write(f)
 
 
-def peticion_archivo(nombre, num_bloques, ip, metodo): # Cliente -- NameNode
+def peticion_archivo(nombre, num_bloques, ip, metodo, password): # Cliente -- NameNode
 
     channel = grpc.insecure_channel(f"{ip}:8080")
 
     stub = servicios_pb2_grpc.cliente_nameStub(channel)
 
     if metodo:
-        response = stub.enviar_metadata(servicios_pb2.informacion_archivo(nombre_archivo=nombre, numero_bloques=num_bloques))
+        response = stub.enviar_metadata(servicios_pb2.informacion_archivo(nombre_archivo=nombre, numero_bloques=num_bloques, password=password))
 
         return response.message
 
     else:
-        response = stub.pedir_metadata(servicios_pb2.peticion(archivo=nombre))
+        response = stub.pedir_metadata(servicios_pb2.peticion(archivo=nombre, password=password))
 
         bloques = [list(l.dir_bloques) for l in response.dir_bloques] #Vuelvo la respuesta en un formato lista para facilitar la interacción
 
@@ -50,7 +50,7 @@ def peticion_archivo(nombre, num_bloques, ip, metodo): # Cliente -- NameNode
 
 
 def peticion_bloques(bloque, ip, nombre_bloque, nombre_archivo, metodo): # Cliente -- DataNode
-    channel = grpc.insecure_channel(f"{ip}:8080")
+    channel = grpc.insecure_channel(f"{ip}:5000")
 
     stub = servicios_pb2_grpc.cliente_dataStub(channel)
 
@@ -86,12 +86,13 @@ def get_port():
 def comunicacion():
 
     ruta_image = sys.argv[2]
+    password = input("Ingrese la contraseña para este archivo: ")
 
     if sys.argv[1] == "post":
 
         bloques = dividir_archivo(ruta_image)
 
-        asignacion = peticion_archivo(ruta_image, len(bloques), get_ip(), True)
+        asignacion = peticion_archivo(ruta_image, len(bloques), get_ip(), True, password)
 
         i = 0
         for bloque in bloques:
@@ -99,7 +100,10 @@ def comunicacion():
             i +=1
 
     elif sys.argv[1] == "get":
-        resultado = peticion_archivo(ruta_image, 0, get_ip(), False)
+        resultado = peticion_archivo(ruta_image, 0, get_ip(), False, password)
+        if not resultado:
+                print("Contraseña incorrecta o archivo no encontrado")
+                return
 
         file = []
 
@@ -111,7 +115,8 @@ def comunicacion():
 
     else:
         print("Metodo incorrecto")
-         
+
+            
 def main():
     if len(sys.argv) > 2:
 

@@ -10,17 +10,15 @@ import configparser
 
 class cliente_nameServicer(servicios_pb2_grpc.cliente_nameServicer):
     def enviar_metadata(self, request, context):
-        asignaciones = asignar_datanodes(request.nombre_archivo, request.numero_bloques)
-
+        asignaciones = asignar_datanodes(request.nombre_archivo, request.numero_bloques, request.password)
         print("!!Bloques guardados con exito!!")
-        
         return servicios_pb2.metadata(message=asignaciones)
     
     def pedir_metadata(self, request, context):
-        bloques = obtener_bloques(request.archivo)
-
+        bloques = obtener_bloques(request.archivo, request.password)
+        if not bloques:  # si la contraseña no coincide
+            return servicios_pb2.lista_bloques(dir_bloques=[])
         print("!!Bloques obtenidos con exito!!")
-
         return servicios_pb2.lista_bloques(dir_bloques=bloques)
 
 def recibir_peticiones():
@@ -30,16 +28,19 @@ def recibir_peticiones():
     server.start()
     server.wait_for_termination()
     
-def guardar_bloques(nombre_archivo, i, ip):
+def guardar_bloques(nombre_archivo, i, ip, password): #cambio
     conn = sqlite3.connect('bloques.db')
     cursor = conn.cursor()
 
-    cursor.execute("INSERT OR REPLACE INTO bloques (name_bloque, name_archivo, ip_asignada) VALUES (?, ?, ?)", (f'{nombre_archivo}{i+1}', nombre_archivo, ip))
+    cursor.execute(
+        "INSERT OR REPLACE INTO bloques (name_bloque, name_archivo, ip_asignada, password) VALUES (?, ?, ?, ?)",
+        (f'{nombre_archivo}{i+1}', nombre_archivo, ip, password)  #cambio
+    )
 
     conn.commit()
     cursor.close()
 
-def asignar_datanodes(nombre_archivo, num_bloques):
+def asignar_datanodes(nombre_archivo, num_bloques, password):
     #Metodo usado round robin
     
     data_nodes = obtener_datanodes()
@@ -48,7 +49,7 @@ def asignar_datanodes(nombre_archivo, num_bloques):
 
     aux = 0
     for ip in cycle(data_nodes):
-        guardar_bloques(nombre_archivo, aux, ip[0])
+        guardar_bloques(nombre_archivo, aux, ip[0], password) #cambio
         asignaciones.append(ip[0])
         aux += 1
         if aux == num_bloques:
@@ -78,11 +79,11 @@ def obtener_datanodes():
 
     return datanodes
 
-def obtener_bloques(nombre_archivo):
+def obtener_bloques(nombre_archivo, password):
     conn = sqlite3.connect('bloques.db')
     cursor = conn.cursor()
 
-    cursor.execute(f"SELECT ip_asignada, name_bloque FROM bloques WHERE name_archivo = ?", (nombre_archivo,))
+    cursor.execute("SELECT ip_asignada, name_bloque FROM bloques WHERE name_archivo = ? AND password = ?", (nombre_archivo, password))
     datanodes = cursor.fetchall()
 
     bloques = []
