@@ -11,11 +11,15 @@ import configparser
 class cliente_nameServicer(servicios_pb2_grpc.cliente_nameServicer):
     def enviar_metadata(self, request, context):
         asignaciones = asignar_datanodes(request.nombre_archivo, request.numero_bloques)
+
+        print("!!Bloques guardados con exito!!")
         
         return servicios_pb2.metadata(message=asignaciones)
     
     def pedir_metadata(self, request, context):
         bloques = obtener_bloques(request.archivo)
+
+        print("!!Bloques obtenidos con exito!!")
 
         return servicios_pb2.lista_bloques(dir_bloques=bloques)
 
@@ -30,7 +34,7 @@ def guardar_bloques(nombre_archivo, i, ip):
     conn = sqlite3.connect('bloques.db')
     cursor = conn.cursor()
 
-    cursor.execute("INSERT INTO bloques (name_bloque, name_archivo, ip_asignada) VALUES (?, ?, ?)", (f'{nombre_archivo}{i+1}', nombre_archivo, ip))
+    cursor.execute("INSERT OR REPLACE INTO bloques (name_bloque, name_archivo, ip_asignada) VALUES (?, ?, ?)", (f'{nombre_archivo}{i+1}', nombre_archivo, ip))
 
     conn.commit()
     cursor.close()
@@ -87,8 +91,6 @@ def obtener_bloques(nombre_archivo):
         aux = servicios_pb2.lista()
         aux.dir_bloques.extend(bloque)
         bloques.append(aux)
-
-    print(bloques)
 
     cursor.close()
     conn.close()

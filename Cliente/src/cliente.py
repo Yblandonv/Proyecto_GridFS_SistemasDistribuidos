@@ -30,7 +30,7 @@ def rearmar_archivo(ruta_archivo, bloques):
             img.write(f)
 
 
-def envio_archivo(nombre, num_bloques, ip, metodo): # Cliente -- NameNode
+def peticion_archivo(nombre, num_bloques, ip, metodo): # Cliente -- NameNode
 
     channel = grpc.insecure_channel(f"{ip}:8080")
 
@@ -42,15 +42,14 @@ def envio_archivo(nombre, num_bloques, ip, metodo): # Cliente -- NameNode
         return response.message
 
     else:
-        print("hola")
         response = stub.pedir_metadata(servicios_pb2.peticion(archivo=nombre))
 
-        bloques = [list(l.dir_bloques) for l in response.dir_bloques]
+        bloques = [list(l.dir_bloques) for l in response.dir_bloques] #Vuelvo la respuesta en un formato lista para facilitar la interacción
 
         return bloques
 
 
-def envio_bloques(bloque, ip, nombre_bloque, nombre_archivo, metodo): # Cliente -- DataNode
+def peticion_bloques(bloque, ip, nombre_bloque, nombre_archivo, metodo): # Cliente -- DataNode
     channel = grpc.insecure_channel(f"{ip}:8080")
 
     stub = servicios_pb2_grpc.cliente_dataStub(channel)
@@ -75,12 +74,14 @@ def get_ip():
 
     return ip
 
+
 def get_port():
     config = configparser.ConfigParser()
     config.read('address.config')
     port = config['nameNode']['port']
 
     return port
+
 
 def comunicacion():
 
@@ -90,36 +91,35 @@ def comunicacion():
 
         bloques = dividir_archivo(ruta_image)
 
-        asignacion = envio_archivo(ruta_image, len(bloques), get_ip(), True)
+        asignacion = peticion_archivo(ruta_image, len(bloques), get_ip(), True)
 
         i = 0
         for bloque in bloques:
-            envio_bloques(bloque, asignacion[i], None, None, True)
+            peticion_bloques(bloque, asignacion[i], None, None, True)
             i +=1
 
     elif sys.argv[1] == "get":
-        resultado = envio_archivo(ruta_image, 0, get_ip(), False)
+        resultado = peticion_archivo(ruta_image, 0, get_ip(), False)
 
         file = []
 
         for bloque in resultado:
-            file.append(envio_bloques(None, bloque[0], bloque[1], ruta_image, False))
+            file.append(peticion_bloques(None, bloque[0], bloque[1], ruta_image, False))
 
-        rearmar_archivo("resultado.jpg", file)
+        rearmar_archivo(sys.argv[3], file)  if sys.argv[3] != None else rearmar_archivo("resultado.jpg", file)
 
 
     else:
         print("Metodo incorrecto")
-        
-    
+         
 def main():
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 2:
 
         comunicacion()
 
         
     else:
-        print("Por favor, proporciona la ruta valida de la imagen.")
+        print("Por favor, proporcione el comando adecuado sudo python3 -m [get/post] [ruta del archivo] opcional:[ruta donde se guardara la copia del get].")
         
 
 
